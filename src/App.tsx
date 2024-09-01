@@ -1,9 +1,24 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { type ipSearch } from './types/ip-search'
 import './App.css'
 
 function App() {
   const [ipInfo, setIpInfo] = useState<ipSearch>()
+  const [userIP, setUserIP] = useState<string>()
+
+  const getUserIP = async () => {
+    const response = await fetch('https://api.ipify.org?format=json')
+    const data = await response.json()
+    setUserIP(data.ip)
+  }
+
+  const handleIPChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUserIP(event.target.value)
+  }
+
+  useEffect(() => {
+    getUserIP()
+  }, [])
 
   const getIpInfo = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -20,7 +35,7 @@ function App() {
     <>
       <h1>Buscar información de IP</h1>
       <form onSubmit={getIpInfo}>
-        <input id="ip" type="text" placeholder="1.1.1.1" value="62.42.18.167" />
+        <input id="ip" type="text" placeholder="1.1.1.1" value={userIP} onChange={handleIPChange} />
         <button type="submit">Buscar</button>
       </form>
       {
