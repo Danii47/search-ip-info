@@ -58,6 +58,7 @@ form button:active {
   border: 1px solid #424242;
   border-radius: 0.5rem;
   padding: 1rem;
+  gap: 20px;
   background-color: rgb(28, 28, 28);
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
 }
@@ -65,4 +66,22 @@ form button:active {
 .ip-info-container h2 {
   text-align: center;
   margin-bottom: 1rem;
+}
+
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.4rem;
+  }
+  .ip-info-container {
+    width: 96vw;
+  }
+
+  .ip-info-container h2 {
+    font-size: 1.5rem;
+  }
+
+  
+
+  
 }
