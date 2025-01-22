@@ -25,7 +25,7 @@ function App() {
 
     const ip = (document.getElementById('ip') as HTMLInputElement).value
     const freeIpApiResponse = await fetch(`https://freeipapi.com/api/json/${ip}`)
-    const ipApiResponse = await fetch(`http://ip-api.com/json/${ip}?fields=66846719`)
+    const ipApiResponse = await fetch(`https://ip-api.com/json/${ip}?fields=66846719`)
     const freeIpApiData = await freeIpApiResponse.json()
     const ipApiData = await ipApiResponse.json()
     setIpInfo({ freeIpApiData, ipApiData })
