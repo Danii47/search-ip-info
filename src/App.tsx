@@ -24,11 +24,16 @@ function App() {
     event.preventDefault()
 
     const ip = (document.getElementById('ip') as HTMLInputElement).value
-    const freeIpApiResponse = await fetch(`https://freeipapi.com/api/json/${ip}`)
-    const ipApiResponse = await fetch(`https://ip-api.com/json/${ip}?fields=66846719`)
-    const freeIpApiData = await freeIpApiResponse.json()
-    const ipApiData = await ipApiResponse.json()
-    setIpInfo({ freeIpApiData, ipApiData })
+
+    try {
+      const freeIpApiResponse = await fetch(`https://freeipapi.com/api/json/${ip}`)
+      
+      const freeIpApiData = await freeIpApiResponse.json()
+      setIpInfo({ freeIpApiData })
+      
+    } catch {
+      console.error("No fue posible realizar la petición.")
+    }
   }
   
   return (
@@ -43,7 +48,7 @@ function App() {
         ipInfo && (
           <div className="ip-info-container">
             {
-              ipInfo.ipApiData.status === "success" ? (
+              ipInfo.freeIpApiData ? (
                 <>
                   <div>
                     <h2>Información de la IP</h2>
@@ -55,36 +60,27 @@ function App() {
                     <p><strong>Código de país:</strong> {ipInfo.freeIpApiData.countryCode}</p>
                     <p><strong>Región:</strong> {ipInfo.freeIpApiData.regionName}</p>
                     <p><strong>Ciudad:</strong> {ipInfo.freeIpApiData.cityName}</p>
-                    <p><strong>Distrito:</strong> {ipInfo.ipApiData.district || "No encontrado"}</p>
-                    <p><strong>Código postal:</strong> {ipInfo.ipApiData.zip}</p>
-                    <p><strong>Latitud:</strong> {ipInfo.ipApiData.lat}</p>
-                    <p><strong>Longitud:</strong> {ipInfo.ipApiData.lon}</p>
+                    <p><strong>Código postal:</strong> {ipInfo.freeIpApiData.zipCode}</p>
+                    <p><strong>Latitud:</strong> {ipInfo.freeIpApiData.latitude}</p>
+                    <p><strong>Longitud:</strong> {ipInfo.freeIpApiData.longitude}</p>
                     <p><strong>Zona horaria:</strong> {ipInfo.freeIpApiData.timeZone}</p>
                     {/* <p><strong>Idioma:</strong> {ipInfo.freeIpApiData.language}</p> */}
                     <p><strong>Moneda:</strong> {ipInfo.freeIpApiData.currency.name} ({ipInfo.freeIpApiData.currency.code})</p>
                     <p><strong>Proxy:</strong> {ipInfo.freeIpApiData.isProxy ? 'Sí' : 'No'}</p>
-                    <p><strong>Es móvil:</strong> {ipInfo.ipApiData.mobile ? 'Sí' : 'No'}</p>
-                    <p><strong>Hosting:</strong> {ipInfo.ipApiData.hosting ? 'Sí' : 'No'}</p>
                     <p><strong>Zonas horarias:</strong> {ipInfo.freeIpApiData.timeZones.join(', ')}</p>
-                    <p><strong>ISP:</strong> {ipInfo.ipApiData.isp}</p>
-                    <p><strong>Organización:</strong> {ipInfo.ipApiData.org}</p>
-                    <p><strong>AS:</strong> {ipInfo.ipApiData.as}</p>
-                    <p><strong>Nombre AS:</strong> {ipInfo.ipApiData.asname}</p>
-                    <p><strong>Reverso:</strong> {ipInfo.ipApiData.reverse}</p>
                     <p><strong>TLDs:</strong> {ipInfo.freeIpApiData.tlds.join(', ')}</p>
-                    </div>
-                    <div>
-                      <iframe
-                        width="600"
-                        height="450"
-                        loading="lazy"
-                        allowFullScreen
-                        referrerPolicy="no-referrer-when-downgrade"
-                        src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBoFf2mJZpgwrxBNmm3ZxGPCGQKe1Tykxw
-                          &q=${ipInfo.ipApiData.lat},${ipInfo.ipApiData.lon}`}>
-                      </iframe>
-                    </div>
-                  </>
+                  </div>
+                  <div id="iframe-container">
+                    <iframe
+                      style={{ width: '100%', height: '350px' }}
+                      loading="lazy"
+                      allowFullScreen
+                      referrerPolicy="no-referrer-when-downgrade"
+                      src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBoFf2mJZpgwrxBNmm3ZxGPCGQKe1Tykxw
+                        &q=${ipInfo.freeIpApiData.latitude},${ipInfo.freeIpApiData.longitude}`}>
+                    </iframe>
+                  </div>
+                </>
               ) : (
                 <strong>No se encontró información para la IP ingresada.</strong>
               )
