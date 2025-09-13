@@ -55,7 +55,6 @@ function App() {
                     <p><strong>IP:</strong> {ipInfo.ip}</p>
                     <p><strong>Red de la IP:</strong> {ipInfo.network}</p>
                     <p><strong>Version de IP:</strong> {ipInfo.version}</p>
-                    {/* <p><strong>Continente:</strong> {ipInfo.continent}</p> */}
                     <p><strong>Código de continente:</strong> {ipInfo.continent_code}</p>
                     <p><strong>País:</strong> {ipInfo.country} ({ipInfo.country_code})</p>
                     <p><strong>Región:</strong> {ipInfo.region} ({ipInfo.region_code})</p>
