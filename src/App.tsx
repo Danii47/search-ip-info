@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { type ipSearch } from './types/ip-search'
+import { type IpApi } from './types/ip-search'
 import './App.css'
 
 function App() {
-  const [ipInfo, setIpInfo] = useState<ipSearch>()
+  const [ipInfo, setIpInfo] = useState<IpApi>()
   const [userIP, setUserIP] = useState<string>("")
 
   const getUserIP = async () => {
@@ -26,10 +26,10 @@ function App() {
     const ip = (document.getElementById('ip') as HTMLInputElement).value
 
     try {
-      const freeIpApiResponse = await fetch(`https://freeipapi.com/api/json/${ip}`)
+      const ipApiResponse = await fetch(`https://ipapi.co/${ip}/json`)
       
-      const freeIpApiData = await freeIpApiResponse.json()
-      setIpInfo({ freeIpApiData })
+      const ipApiData = await ipApiResponse.json()
+      setIpInfo(ipApiData)
       
     } catch {
       console.error("No fue posible realizar la petición.")
@@ -48,27 +48,32 @@ function App() {
         ipInfo && (
           <div className="ip-info-container">
             {
-              ipInfo.freeIpApiData ? (
+              ipInfo ? (
                 <>
                   <div>
                     <h2>Información de la IP</h2>
-                    <p><strong>IP:</strong> {ipInfo.freeIpApiData.ipAddress}</p>
-                    <p><strong>Version de IP:</strong> {ipInfo.freeIpApiData.ipVersion}</p>
-                    <p><strong>Continente:</strong> {ipInfo.freeIpApiData.continent}</p>
-                    <p><strong>Código de continente:</strong> {ipInfo.freeIpApiData.continentCode}</p>
-                    <p><strong>País:</strong> {ipInfo.freeIpApiData.countryName}</p>
-                    <p><strong>Código de país:</strong> {ipInfo.freeIpApiData.countryCode}</p>
-                    <p><strong>Región:</strong> {ipInfo.freeIpApiData.regionName}</p>
-                    <p><strong>Ciudad:</strong> {ipInfo.freeIpApiData.cityName}</p>
-                    <p><strong>Código postal:</strong> {ipInfo.freeIpApiData.zipCode}</p>
-                    <p><strong>Latitud:</strong> {ipInfo.freeIpApiData.latitude}</p>
-                    <p><strong>Longitud:</strong> {ipInfo.freeIpApiData.longitude}</p>
-                    <p><strong>Zona horaria:</strong> {ipInfo.freeIpApiData.timeZone}</p>
-                    {/* <p><strong>Idioma:</strong> {ipInfo.freeIpApiData.language}</p> */}
-                    <p><strong>Moneda:</strong> {ipInfo.freeIpApiData.currency.name} ({ipInfo.freeIpApiData.currency.code})</p>
-                    <p><strong>Proxy:</strong> {ipInfo.freeIpApiData.isProxy ? 'Sí' : 'No'}</p>
-                    <p><strong>Zonas horarias:</strong> {ipInfo.freeIpApiData.timeZones.join(', ')}</p>
-                    <p><strong>TLDs:</strong> {ipInfo.freeIpApiData.tlds.join(', ')}</p>
+                    <p><strong>IP:</strong> {ipInfo.ip}</p>
+                    <p><strong>Red de la IP:</strong> {ipInfo.network}</p>
+                    <p><strong>Version de IP:</strong> {ipInfo.version}</p>
+                    {/* <p><strong>Continente:</strong> {ipInfo.continent}</p> */}
+                    <p><strong>Código de continente:</strong> {ipInfo.continent_code}</p>
+                    <p><strong>País:</strong> {ipInfo.country} ({ipInfo.country_code})</p>
+                    <p><strong>Región:</strong> {ipInfo.region} ({ipInfo.region_code})</p>
+                    <p><strong>Ciudad:</strong> {ipInfo.city}</p>
+                    <p><strong>Código postal:</strong> {ipInfo.postal}</p>
+                    <p><strong>Latitud:</strong> {ipInfo.latitude}</p>
+                    <p><strong>Longitud:</strong> {ipInfo.longitude}</p>
+                    <p><strong>Zona horaria:</strong> {ipInfo.timezone}</p>
+                    <p><strong>UTC:</strong> {ipInfo.utc_offset}</p>
+                    <p><strong>Está en la UE:</strong> {ipInfo.in_eu ? 'Sí' : 'No'}</p>
+                    <p><strong>ISP:</strong> {ipInfo.org}</p>
+                    <p><strong>ASN:</strong> {ipInfo.asn}</p>
+                    <p><strong>Idioma:</strong> {ipInfo.languages}</p>
+                    <p><strong>Moneda:</strong> {ipInfo.currency_name} ({ipInfo.currency})</p>
+                    <p><strong>TLD:</strong> {ipInfo.country_tld}</p>
+                    <p><strong>Código de llamada:</strong> {ipInfo.country_calling_code}</p>
+                    <p><strong>Área del país:</strong> {ipInfo.country_area} km²</p>
+                    <p><strong>Población del país:</strong> {ipInfo.country_population}</p>
                   </div>
                   <div id="iframe-container">
                     <iframe
@@ -77,7 +82,7 @@ function App() {
                       allowFullScreen
                       referrerPolicy="no-referrer-when-downgrade"
                       src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBoFf2mJZpgwrxBNmm3ZxGPCGQKe1Tykxw
-                        &q=${ipInfo.freeIpApiData.latitude},${ipInfo.freeIpApiData.longitude}`}>
+                        &q=${ipInfo.latitude},${ipInfo.longitude}`}>
                     </iframe>
                   </div>
                 </>
